@@ -11,8 +11,17 @@
   },
   "dependencies": {
     "@nuxt/ui": "^2.19.2",
+    "better-sqlite3": "^11.5.0",
+    "drizzle-orm": "^0.36.1",
     "nuxt": "^3.14.159",
+    "sqlite3": "^5.1.7",
     "vue": "latest",
     "vue-router": "latest"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "drizzle-kit": "^0.28.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
   }
 }
