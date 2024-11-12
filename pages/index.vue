@@ -1,36 +1,36 @@
 <script setup>
 
-const taskInput = ref(''); 
-const tasks = ref([]); 
+// const taskInput = ref(''); 
+// const tasks = ref([]); 
 
-onMounted(() => {
-  const savedTasks = JSON.parse(localStorage.getItem('tasks'));
-  if (savedTasks) {
-    tasks.value = savedTasks;
-  }
-});
+// onMounted(() => {
+//   const savedTasks = JSON.parse(localStorage.getItem('tasks'));
+//   if (savedTasks) {
+//     tasks.value = savedTasks;
+//   }
+// });
 
-watch(tasks, (newTasks) => {
-  localStorage.setItem('tasks', JSON.stringify(newTasks));
-});
+// watch(tasks, (newTasks) => {
+//   localStorage.setItem('tasks', JSON.stringify(newTasks));
+// });
 
-const addTask = () => {
-  if (taskInput.value.trim() !== '') {
-    tasks.value.push({
-      name: taskInput.value,
-      completed: false,
-    });
-    taskInput.value = ''; 
-  }
-};
+// const addTask = () => {
+//   if (taskInput.value.trim() !== '') {
+//     tasks.value.push({
+//       name: taskInput.value,
+//       completed: false,
+//     });
+//     taskInput.value = ''; 
+//   }
+// };
 
-const deleteTask = (index) => {
-  tasks.value.splice(index, 1); 
-};
+// const deleteTask = (index) => {
+//   tasks.value.splice(index, 1); 
+// };
 
-const toggleTaskCompletion = (index) => {
-  tasks.value[index].completed = !tasks.value[index].completed;
-};
+// const toggleTaskCompletion = (index) => {
+//   tasks.value[index].completed = !tasks.value[index].completed;
+// };
 
 </script>
 
