@@ -5,36 +5,15 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1731317864661,
-      "tag": "0000_stormy_daredevil",
+      "when": 1732008373783,
+      "tag": "0000_groovy_overlord",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "6",
-      "when": 1731320603499,
-      "tag": "0001_youthful_risque",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1731386899366,
-      "tag": "0002_black_sabretooth",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1731393432085,
-      "tag": "0003_glossy_toad_men",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1731409061859,
-      "tag": "0004_youthful_tyrannus",
+      "when": 1732008637556,
+      "tag": "0001_spicy_cardiac",
       "breakpoints": true
     }
   ]
