@@ -1,47 +1,9 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "10f7dbe2-05a2-46c2-b5f6-08219245c135",
-  "prevId": "b3e8c5b2-ad96-470e-98bc-956d0a6dbbd8",
+  "id": "62cb6ed1-abe0-4c66-8f50-9bf1f5c9aa23",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "users": {
-      "name": "users",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "first_name": {
-          "name": "first_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "last_name": {
-          "name": "last_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "age": {
-          "name": "age",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
     "todo": {
       "name": "todo",
       "columns": {
@@ -81,6 +43,44 @@
           "notNull": false,
           "autoincrement": false,
           "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "age": {
+          "name": "age",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {},

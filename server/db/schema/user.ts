@@ -1,6 +1,6 @@
 import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core'
 import type { InferInsertModel } from 'drizzle-orm'
-import { todo } from './schema_todo'
+import { todo } from './todo'
 
 const users = sqliteTable('users', {
   id: integer('id').primaryKey(),
