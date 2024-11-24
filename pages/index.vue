@@ -1,116 +1,62 @@
-<script setup>
-const taskInput = ref('');
-const tasks = ref([]);
-
-const fetchTasks = async () => {
-  try {
-    const fetchedTasks = await $fetch('/api/todo');
-    tasks.value = fetchedTasks; 
-  } catch (e) {
-    console.error('Error fetching tasks', e);
-  }
-};
-
-// Add a new task
-const addTask = async () => {
-  if (taskInput.value.trim() !== '') {
-    try {
-      const newTask = await $fetch('/api/todo', {
-        method: 'POST',
-        body: { title: taskInput.value },
-      });
-
-      tasks.value.push(newTask);
-      taskInput.value = ''; 
-    } catch (e) {
-      console.error('Error adding task', e);
-    }
-  } else {
-    console.error('Task title cannot be empty!');
-  }
-};
-
-// Delete task
-const deleteTask = async (taskId) => {
-  try {
-    await $fetch(`/api/todo/${taskId}`, { method: 'DELETE' });
-    tasks.value = tasks.value.filter((task) => task.id !== taskId);
-  } catch (e) {
-    console.error('Error deleting task', e);
-  }
-};
-onMounted(fetchTasks);
-</script>
-
-
 <template>
-  <main>
-    <div class="to-do w-full max-w-xl mx-auto bg-wheat p-8 rounded-lg mt-10">
-      <h2 class="text-xl font-bold flex items-center mb-6">To-Do List</h2>
-
-      <div class="flex items-center justify-between mb-6 bg-black p-3 rounded-full">
-        <input
-          v-model="taskInput"
-          type="text"
-          placeholder="Write the item here!"
-          class="flex-1 p-3 bg-transparent border-none outline-none"
-        />
-        <button
-          @click="addTask"
-          class="bg-blue-800 p-3 w-[80px] rounded-full cursor-pointer ml-3"
-        >
-          Add
-        </button>
-      </div>
-
-      <ul class="space-y-3">
-        <li
-          v-for="task in tasks"
-          :key="task.id"
-          :class="{ 'line-through text-white': task.status === 'completed' }"
-          class="relative p-3 pl-12 cursor-pointer rounded"
-          @click="toggleTaskCompletion(task)"
-        >
-          {{ task.title }}
-          <span
-            @click.stop="deleteTask(task.id)"
-            class="absolute right-0 top-1/2 transform -translate-y-1/2 text-xl text-red-600 cursor-pointer"
+    <div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
+      <div class="w-full max-w-lg bg-white shadow-md rounded-lg p-6 text-center">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Welcome to TodoApp</h1>
+        <p class="text-gray-600 mb-6">
+          Manage your tasks effortlessly. Please sign in to access your dashboard.
+        </p>
+  
+        <div v-if="!isSignedIn">
+          <button
+            class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            @click="signIn"
           >
-            ×
-          </span>
-        </li>
-      </ul>
+            Sign In
+          </button>
+        </div>
+  
+        <div v-else>
+          <p class="text-gray-600 mb-4">
+            Welcome back, <strong>{{ username }}</strong>!
+          </p>
+          <button
+            class="w-full py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+            @click="goToDashboard"
+          >
+            Go to Dashboard
+          </button>
+          <button
+            class="w-full py-2 px-4 mt-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+            @click="signOut"
+          >
+            Sign Out
+          </button>
+        </div>
+      </div>
     </div>
-  </main>
-</template>
+  </template>
+  
+  <script setup>
 
-<style scoped>
-.to-do {
-  background-color: gray;
-  border-radius: 8px;
-}
-
-ul li {
-  list-style: none;
-  position: relative;
-}
-
-ul li span {
-  font-size: 20px;
-  line-height: 40px;
-  text-align: center;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  background-color: #f87171;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-
-ul li span:hover {
-  background-color: #d32f2f;
-}
-</style>
+const isSignedIn = ref(false);
+  const username = ref("Michael Jackson");
+  const router = useRouter();
+  
+  const signIn = () => {
+    alert("Signing in...");
+    isSignedIn.value = true;
+    username.value = "Michael Jackson";
+    goToDashboard();
+  };
+  
+  const goToDashboard = () => {
+    router.push("/signin");
+  };
+  
+  const signOut = () => {
+    alert("Signing out...");
+    isSignedIn.value = false;
+    username.value = "";
+  };
+  </script>
+  
