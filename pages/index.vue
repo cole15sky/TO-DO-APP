@@ -39,13 +39,11 @@
   <script setup>
 
 const isSignedIn = ref(false);
-  const username = ref("Michael Jackson");
+  const username = ref("");
   const router = useRouter();
   
   const signIn = () => {
-    alert("Signing in...");
     isSignedIn.value = true;
-    username.value = "Michael Jackson";
     goToDashboard();
   };
   
