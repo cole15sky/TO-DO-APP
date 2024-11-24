@@ -5,7 +5,7 @@ const tasks = ref([]);
 const fetchTasks = async () => {
   try {
     const fetchedTasks = await $fetch('/api/todo');
-    tasks.value = fetchedTasks; 
+    tasks.value = fetchedTasks;
   } catch (e) {
     console.error('Error fetching tasks', e);
   }
@@ -21,7 +21,7 @@ const addTask = async () => {
       });
 
       tasks.value.push(newTask);
-      taskInput.value = ''; 
+      taskInput.value = '';
     } catch (e) {
       console.error('Error adding task', e);
     }
@@ -32,13 +32,28 @@ const addTask = async () => {
 
 // Delete task
 const deleteTask = async (taskId) => {
-  try {
+ 
     await $fetch(`/api/todo/${taskId}`, { method: 'DELETE' });
     tasks.value = tasks.value.filter((task) => task.id !== taskId);
-  } catch (e) {
-    console.error('Error deleting task', e);
-  }
 };
+
+// //patch
+// const editTask = async(taskId)=>{
+//     await $fetch(`/api/todo/${taskId}`, { method: 'PATCH' }); 
+// }
+
+// const editingTask = ref(taskId)
+// debugger
+
+const editTask = (id, correpondingTitle) => {
+  // taskInput.value = task.title;
+  // editingTaskId.value = task.id;
+  console.log(`Title is ${correpondingTitle}`);
+  console.log("edit is clicked")
+  document.querySelector(".main-box").value = correpondingTitle;
+  // console.log(e.target)
+};
+
 onMounted(fetchTasks);
 </script>
 
@@ -49,33 +64,26 @@ onMounted(fetchTasks);
       <h2 class="text-xl font-bold flex items-center mb-6">To-Do List</h2>
 
       <div class="flex items-center justify-between mb-6 bg-black p-3 rounded-full">
-        <input
-          v-model="taskInput"
-          type="text"
-          placeholder="Write the item here!"
-          class="flex-1 p-3 bg-transparent border-none outline-none"
-        />
-        <button
-          @click="addTask"
-          class="bg-blue-800 p-3 w-[80px] rounded-full cursor-pointer ml-3"
-        >
+        <input v-model="taskInput" type="text" placeholder="Write the item here!"
+          class="main-box flex-1 p-3 bg-transparent border-none outline-none" />
+        <button @click="addTask" class="bg-blue-800 p-3 w-[80px] rounded-full cursor-pointer ml-3">
           Add
         </button>
       </div>
 
       <ul class="space-y-3">
-        <li
-          v-for="task in tasks"
-          :key="task.id"
-          :class="{ 'line-through text-white': task.status === 'completed' }"
+        <li v-for="task in tasks"
+         :key="task.id"
+          :class="{ 'line-through text-black': task.status === 'completed' }"
           class="relative p-3 pl-12 cursor-pointer rounded"
-          @click="toggleTaskCompletion(task)"
-        >
-          {{ task.title }}
-          <span
-            @click.stop="deleteTask(task.id)"
-            class="absolute right-0 top-1/2 transform -translate-y-1/2 text-xl text-red-600 cursor-pointer"
-          >
+           @click="toggleTaskCompletion(task)">
+          <span class="task-content">{{ task.title }}</span>
+          <span @click.stop="editTask(task.id, task.title )"
+            class="absolute right-12 top-1/2 transform -translate-y-1/2 text-xl text-blue-600 cursor-pointer">
+            Edit
+          </span>
+          <span @click.stop="deleteTask(task.id)"
+            class="absolute right-0 top-1/2 transform -translate-y-1/2 text-xl text-red-600 cursor-pointer">
             ×
           </span>
         </li>

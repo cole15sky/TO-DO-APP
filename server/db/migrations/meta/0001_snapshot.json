@@ -1,8 +1,8 @@
 {
+  "id": "dfa130c7-f151-4d48-8885-3ad9f95d7349",
+  "prevId": "4435d1ec-9489-46a4-b4a1-4690cd897256",
   "version": "6",
   "dialect": "sqlite",
-  "id": "4435d1ec-9489-46a4-b4a1-4690cd897256",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "todo": {
       "name": "todo",
@@ -93,9 +93,9 @@
   "views": {},
   "enums": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
+    "tables": {}
   },
   "internal": {
     "indexes": {}
