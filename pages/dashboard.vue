@@ -43,6 +43,17 @@ const editTask = (id, correpondingTitle) => {
   document.querySelector(".main-box").value = correpondingTitle;
 };
 
+//toggle task.
+const toggleTaskCompletion = async (task)=>{
+  const updatedTask = await $fetch(`/api/todo/${task.id}`, {
+    method:'PATCH',
+    body:{
+      title:task.title,
+      completed: !task.completed
+    }
+  })
+}
+
 onMounted(fetchTasks);
 </script>
 
@@ -63,7 +74,7 @@ onMounted(fetchTasks);
       <ul class="space-y-3">
         <li v-for="task in tasks"
          :key="task.id"
-          :class="{ 'line-through text-black': task.status === 'completed' }"
+          :class="{ 'line-through text-black': task.completed }"
           class="relative p-3 pl-12 cursor-pointer rounded"
            @click="toggleTaskCompletion(task)">
           <p class="task-content">{{ task.title }}</p>
