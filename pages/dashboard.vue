@@ -1,17 +1,17 @@
 <script setup>
 const taskInput = ref('');
 const tasks = ref([]);
+const editingTask = ref(null);
 
 const fetchTasks = async () => {
   try {
     const fetchedTasks = await $fetch('/api/todo');
-    tasks.value = fetchedTasks;
+    tasks.value = fetchedTasks.map(task => ({ ...task, isEditing: false }));
   } catch (e) {
     console.error('Error fetching tasks', e);
   }
 };
 
-// Add a new task
 const addTask = async () => {
   if (taskInput.value.trim() !== '') {
     try {
@@ -21,7 +21,7 @@ const addTask = async () => {
       });
 
       tasks.value.push(newTask);
-      taskInput.value = 'PATCH';
+      taskInput.value = '';
     } catch (e) {
       console.error('Error adding task', e);
     }
@@ -30,25 +30,41 @@ const addTask = async () => {
   }
 };
 
-// Delete task
 const deleteTask = async (taskId) => {
- 
-    await $fetch(`/api/todo/${taskId}`, { method: 'DELETE' });
-    tasks.value = tasks.value.filter((task) => task.id !== taskId);
+  await $fetch(`/api/todo/${taskId}`, { method: 'DELETE' });
+  tasks.value = tasks.value.filter((task) => task.id !== taskId);
 };
 
-const editTask = (id, correpondingTitle) => {
-  console.log(`Title is ${correpondingTitle}`);
-  console.log("edit is clicked")
-  document.querySelector(".main-box").value = correpondingTitle;
+const editTask = (task) => {
+  editingTask.value = { ...task };
+  task.isEditing = true;
+};
+
+const updateTask = async (task) => {
+  try {
+    const updatedTask = await $fetch(`/api/todo/${task.id}`, {
+      method: 'PATCH',
+      body: { title: editingTask.value.title },
+    });
+    task.title = updatedTask.title;
+    task.isEditing = false;
+    editingTask.value = null;
+  } catch (e) {
+    console.error('Error updating task', e);
+  }
+};
+
+const cancelEdit = (task) => {
+  task.isEditing = false;
+  editingTask.value = null;
 };
 
 //toggle task.
-const toggleTaskCompletion = async (task)=>{
+const toggleTaskCompletion = async (task) => {
   const updatedTask = await $fetch(`/api/todo/${task.id}`, {
-    method:'PATCH',
-    body:{
-      title:task.title,
+    method: 'PATCH',
+    body: {
+      title: task.title,
       completed: !task.completed
     }
   })
@@ -65,27 +81,34 @@ onMounted(fetchTasks);
 
       <div class="flex items-center justify-between mb-6 bg-black p-3 rounded-full">
         <input v-model="taskInput" type="text" placeholder="Write the item here!"
-          class="main-box flex-1 p-3 bg-transparent border-none outline-none" />
+          class="main-box  text-black flex-1 p-3 bg-transparent border-none outline-none" />
         <button @click="addTask" class="bg-blue-800 p-3 w-[80px] rounded-full cursor-pointer ml-3">
           Add
         </button>
       </div>
 
       <ul class="space-y-3">
-        <li v-for="task in tasks"
-         :key="task.id"
-          :class="{ 'line-through text-black': task.completed }"
-          class="relative p-3 pl-12 cursor-pointer rounded"
-           @click="toggleTaskCompletion(task)">
-          <p class="task-content">{{ task.title }}</p>
-          <span @click.stop="editTask(task.id, task.title )"
-            class="absolute right-12 top-1/2 transform -translate-y-1/2 text-xl text-blue-600 cursor-pointer">
-            Edit
-          </span>
-          <span @click.stop="deleteTask(task.id)"
-            class="absolute right-0 top-1/2 transform -translate-y-1/2 text-xl text-red-600 cursor-pointer">
-            ×
-          </span>
+        <li v-for="task in tasks" :key="task.id" :class="{ 'line-through text-black': task.completed }"
+          class="relative p-3 pl-12 cursor-pointer rounded">
+          <div v-if="task.isEditing" class="flex items-center">
+            <input v-model="editingTask.title" type="text" class="flex-1 p-2 text-blue-800 border rounded" />
+            <div>
+              <button @click="cancelEdit(task)" class="ml-2 bg-white rounded-3xl p-2">✖</button>
+              <button @click="updateTask(task)" class="ml-2 bg-white rounded-3xl p-2 ">✔</button>
+            </div>
+          </div>
+
+          <div v-else @click="toggleTaskCompletion(task)" class="task-content cursor-pointer">
+           {{ task.title }}
+            <span @click.stop="editTask(task)"
+              class="absolute right-12 top-1/2 transform -translate-y-1/2 text-xl text-blue cursor-pointer">
+              Edit
+            </span>
+            <span @click.stop="deleteTask(task.id)"
+              class="absolute right-0 top-1/2 transform -translate-y-1/2 text-xl text-red-600 cursor-pointer">
+              ×
+            </span>
+          </div>
         </li>
       </ul>
     </div>
@@ -99,7 +122,7 @@ onMounted(fetchTasks);
 }
 
 ul li {
-  list-style: none;
+  list-style: decimal;
   position: relative;
 }
 
@@ -120,5 +143,12 @@ ul li span {
 
 ul li span:hover {
   background-color: #d32f2f;
+}
+
+input[type='text'] {
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }
 </style>
