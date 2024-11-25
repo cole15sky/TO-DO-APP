@@ -82,7 +82,7 @@ onMounted(fetchTasks);
       <div class="flex items-center justify-between mb-6 bg-black p-3 rounded-full">
         <input v-model="taskInput" type="text" placeholder="Write the item here!"
           class="main-box  text-black flex-1 p-3 bg-transparent border-none outline-none" />
-        <button @click="addTask" class="bg-blue-800 p-3 w-[80px] rounded-full cursor-pointer ml-3">
+        <button @click="addTask" class="bg-blue-500 hover:bg-blue-800 p-3 w-[80px] rounded-full cursor-pointer ml-3">
           Add
         </button>
       </div>
@@ -93,8 +93,8 @@ onMounted(fetchTasks);
           <div v-if="task.isEditing" class="flex items-center">
             <input v-model="editingTask.title" type="text" class="flex-1 p-2 text-blue-800 border rounded" />
             <div>
-              <button @click="cancelEdit(task)" class="ml-2 bg-white rounded-3xl p-2">✖</button>
-              <button @click="updateTask(task)" class="ml-2 bg-white rounded-3xl p-2 ">✔</button>
+              <button @click="cancelEdit(task)" class="ml-2 bg-white rounded-3xl p-2 hover:bg-blue-500 hover:text-white transition duration-200">✖</button>
+              <button @click="updateTask(task)" class="ml-2 bg-white rounded-3xl p-2  hover:bg-red-600 hover:text-white transition duration-200">✔</button>
             </div>
           </div>
 
@@ -102,11 +102,11 @@ onMounted(fetchTasks);
            {{ task.title }}
             <span @click.stop="editTask(task)"
               class="absolute right-12 top-1/2 transform -translate-y-1/2 text-xl text-blue cursor-pointer">
-              Edit
+              🖋️
             </span>
             <span @click.stop="deleteTask(task.id)"
               class="absolute right-0 top-1/2 transform -translate-y-1/2 text-xl text-red-600 cursor-pointer">
-              ×
+              ✖
             </span>
           </div>
         </li>
@@ -126,14 +126,14 @@ ul li {
   position: relative;
 }
 
-ul li span {
+ul span {
   font-size: 20px;
   line-height: 40px;
   text-align: center;
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  background-color: #f87171;
+  background-color: white;
   color: white;
   display: flex;
   justify-content: center;
@@ -142,7 +142,7 @@ ul li span {
 }
 
 ul li span:hover {
-  background-color: #d32f2f;
+  background-color: skyblue
 }
 
 input[type='text'] {
