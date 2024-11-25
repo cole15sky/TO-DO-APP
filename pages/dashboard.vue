@@ -21,7 +21,7 @@ const addTask = async () => {
       });
 
       tasks.value.push(newTask);
-      taskInput.value = '';
+      taskInput.value = 'PATCH';
     } catch (e) {
       console.error('Error adding task', e);
     }
@@ -37,21 +37,10 @@ const deleteTask = async (taskId) => {
     tasks.value = tasks.value.filter((task) => task.id !== taskId);
 };
 
-// //patch
-// const editTask = async(taskId)=>{
-//     await $fetch(`/api/todo/${taskId}`, { method: 'PATCH' }); 
-// }
-
-// const editingTask = ref(taskId)
-// debugger
-
 const editTask = (id, correpondingTitle) => {
-  // taskInput.value = task.title;
-  // editingTaskId.value = task.id;
   console.log(`Title is ${correpondingTitle}`);
   console.log("edit is clicked")
   document.querySelector(".main-box").value = correpondingTitle;
-  // console.log(e.target)
 };
 
 onMounted(fetchTasks);
@@ -77,7 +66,7 @@ onMounted(fetchTasks);
           :class="{ 'line-through text-black': task.status === 'completed' }"
           class="relative p-3 pl-12 cursor-pointer rounded"
            @click="toggleTaskCompletion(task)">
-          <span class="task-content">{{ task.title }}</span>
+          <p class="task-content">{{ task.title }}</p>
           <span @click.stop="editTask(task.id, task.title )"
             class="absolute right-12 top-1/2 transform -translate-y-1/2 text-xl text-blue-600 cursor-pointer">
             Edit
