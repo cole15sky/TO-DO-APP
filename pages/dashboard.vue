@@ -59,29 +59,30 @@ const cancelEdit = (task) => {
   editingTask.value = null;
 };
 
-//toggle task.
 const toggleTaskCompletion = async (task) => {
-  const updatedTask = await $fetch(`/api/todo/${task.id}`, {
-    method: 'PATCH',
-    body: {
-      title: task.title,
-      completed: !task.completed
-    }
-  })
-}
-
-//clear all todos.
-const clearTodo = async (tasks) => {
+  const previousState = task.completed;
+    task.completed = !task.completed;
   try {
+    await $fetch(`/api/todo/${task.id}`, {
+      method: 'PATCH',
+      body: {
+        title: task.title,
+        completed: task.completed
+      }
+    });
+  } catch (error) {
+    console.error('Error updating task:', error);
+    task.completed = previousState;
+  }
+};
+
+const clearTodo = async () => {
+    tasks.value = [];
     await $fetch(`/api/todo`, {
       method: 'DELETE',
     });
-    tasks.value = [];
-    
-  } catch (error) {
-    console.error("Failed to clear todos:", error);
   }
-};
+  
 onMounted(fetchTasks);
 </script>
 
