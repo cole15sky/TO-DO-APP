@@ -70,6 +70,18 @@ const toggleTaskCompletion = async (task) => {
   })
 }
 
+//clear all todos.
+const clearTodo = async (tasks) => {
+  try {
+    await $fetch(`/api/todo`, {
+      method: 'DELETE',
+    });
+    tasks.value = [];
+    
+  } catch (error) {
+    console.error("Failed to clear todos:", error);
+  }
+};
 onMounted(fetchTasks);
 </script>
 
@@ -78,7 +90,9 @@ onMounted(fetchTasks);
   <main>
     <div class="to-do w-full max-w-xl mx-auto bg-wheat p-8 rounded-lg mt-10">
       <h2 class="text-xl font-bold flex items-center mb-6">To-Do List</h2>
-
+      <div class="flex justify-center mb-1">
+        <button class="bg-red-500 p-1 rounded-full hover:bg-red-700 hover:text-blue-600 transition duration-300" @click="clearTodo">Clear</button>
+      </div>
       <div class="flex items-center justify-between mb-6 bg-black p-3 rounded-full">
         <input v-model="taskInput" type="text" placeholder="Write the item here!"
           class="  text-black flex-1 p-3 bg-transparent border-none outline-none" />
