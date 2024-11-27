@@ -1,27 +1,21 @@
 <script setup>
 const taskInput = ref('');
-const tasks = ref([]);
 const editingTask = ref(null);
 
-const fetchTasks = async () => {
-  try {
-    const fetchedTasks = await $fetch('/api/todo');
-    tasks.value = fetchedTasks.map(task => ({ ...task, isEditing: false }));
-  } catch (e) {
-    console.error('Error fetching tasks', e);
-  }
-};
+const { data: tasks, error, refresh } = useFetch('/api/todo', {
+  transform: (fetchedTasks) => fetchedTasks.map(task => ({ ...task, isEditing: false })),
+  immediate: true,
+});
 
 const addTask = async () => {
   if (taskInput.value.trim() !== '') {
     try {
-      const newTask = await $fetch('/api/todo', {
+      await $fetch('/api/todo', {
         method: 'POST',
         body: { title: taskInput.value },
       });
-
-      tasks.value.push(newTask);
       taskInput.value = '';
+      refresh();
     } catch (e) {
       console.error('Error adding task', e);
     }
@@ -31,8 +25,12 @@ const addTask = async () => {
 };
 
 const deleteTask = async (taskId) => {
-  await $fetch(`/api/todo/${taskId}`, { method: 'DELETE' });
-  tasks.value = tasks.value.filter((task) => task.id !== taskId);
+  try {
+    await $fetch(`/api/todo/${taskId}`, { method: 'DELETE' });
+    refresh();
+  } catch (e) {
+    console.error('Error deleting task', e);
+  }
 };
 
 const editTask = (task) => {
@@ -49,6 +47,7 @@ const updateTask = async (task) => {
     task.title = updatedTask.title;
     task.isEditing = false;
     editingTask.value = null;
+    refresh();
   } catch (e) {
     console.error('Error updating task', e);
   }
@@ -61,15 +60,16 @@ const cancelEdit = (task) => {
 
 const toggleTaskCompletion = async (task) => {
   const previousState = task.completed;
-    task.completed = !task.completed;
+  task.completed = !task.completed;
   try {
     await $fetch(`/api/todo/${task.id}`, {
       method: 'PATCH',
       body: {
         title: task.title,
-        completed: task.completed
-      }
+        completed: task.completed,
+      },
     });
+    refresh();
   } catch (error) {
     console.error('Error updating task:', error);
     task.completed = previousState;
@@ -77,14 +77,15 @@ const toggleTaskCompletion = async (task) => {
 };
 
 const clearTodo = async () => {
-    tasks.value = [];
-    await $fetch(`/api/todo`, {
-      method: 'DELETE',
-    });
+  try {
+    await $fetch('/api/todo', { method: 'DELETE' });
+    refresh();
+  } catch (e) {
+    console.error('Error clearing tasks', e);
   }
-  
-onMounted(fetchTasks);
+};
 </script>
+
 
 
 <template>
@@ -92,7 +93,8 @@ onMounted(fetchTasks);
     <div class="to-do w-full max-w-xl mx-auto bg-wheat p-8 rounded-lg mt-10">
       <h2 class="text-xl font-bold flex items-center mb-6">To-Do List</h2>
       <div class="flex justify-center mb-1">
-        <button class="bg-red-500 p-1 rounded-full hover:bg-red-700 hover:text-blue-600 transition duration-300" @click="clearTodo">Clear</button>
+        <button class="bg-red-500 p-1 rounded-full hover:bg-red-700 hover:text-blue-600 transition duration-300"
+          @click="clearTodo">Clear</button>
       </div>
       <div class="flex items-center justify-between mb-6 bg-black p-3 rounded-full">
         <input v-model="taskInput" type="text" placeholder="Write the item here!"
@@ -108,13 +110,15 @@ onMounted(fetchTasks);
           <div v-if="task.isEditing" class="flex items-center">
             <input v-model="editingTask.title" type="text" class="flex-1 p-2 text-blue-800 border rounded" />
             <div>
-              <button @click="cancelEdit(task)" class="ml-2 bg-white rounded-3xl p-2 hover:bg-blue-500 hover:text-white transition duration-200">✖</button>
-              <button @click="updateTask(task)" class="ml-2 bg-white rounded-3xl p-2  hover:bg-red-600 hover:text-white transition duration-200">✔</button>
+              <button @click="cancelEdit(task)"
+                class="ml-2 bg-white rounded-3xl p-2 hover:bg-blue-500 hover:text-white transition duration-200">✖</button>
+              <button @click="updateTask(task)"
+                class="ml-2 bg-white rounded-3xl p-2  hover:bg-red-600 hover:text-white transition duration-200">✔</button>
             </div>
           </div>
 
           <div v-else @click="toggleTaskCompletion(task)" class="task-content text-xl cursor-pointer">
-           {{ task.title }}
+            {{ task.title }}
             <span @click.stop="editTask(task)"
               class="absolute right-12 top-1/2 transform -translate-y-1/2 text-xl text-blue cursor-pointer">
               🖋️
@@ -126,6 +130,7 @@ onMounted(fetchTasks);
           </div>
         </li>
       </ul>
+      <div v-if="error" class="text-red-500">Error loading tasks: {{ error.message }}</div>
     </div>
   </main>
 </template>
@@ -135,6 +140,7 @@ onMounted(fetchTasks);
   background-color: gray;
   border-radius: 8px;
 }
+
 ul li {
   list-style: decimal;
   position: relative;
