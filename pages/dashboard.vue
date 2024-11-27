@@ -92,10 +92,6 @@ const clearTodo = async () => {
 
 const signOut = () => {
     isSignedIn.value = true;
-    goTosignIn();
-  };
-  
-  const goTosignIn = () => {
     router.push("/signin");
   };
 </script>
@@ -103,9 +99,15 @@ const signOut = () => {
 
 <template>
   <main class="flex justify-center items-center min-h-screen bg-gray-400">
-    <div class="absolute top-6 left-[100px]">
-      <button class="bg-red-600 p-3 rounded-3xl hover:bg-red-800" @click="signOut"> SignOut</button>
-    </div>
+    <div class="absolute top-6 left-4 md:left-8 lg:left-16">
+  <button
+    class="bg-red-600 p-2 sm:p-3 md:p-3 text-sm sm:text-base md:text-lg  rounded-full hover:bg-red-800 transition duration-300"
+    @click="signOut"
+  >
+    SignOut
+  </button>
+</div>
+
     <div class="w-full max-w-4xl bg-white shadow-xl bg-purple-200 rounded-lg p-8 border-2 border-blue-800">
       <div class="flex justify-center">
         <h1 class="text-3xl p-1 font-bold border-white border-2 border:rounded-xl text-gray-800 border-blue-900">To-Do
@@ -115,7 +117,7 @@ const signOut = () => {
       <div class="flex items-center justify-between mt-10 bg-gray-800 p-4 rounded-lg shadow-md">
         <input v-model="taskInput" type="text" placeholder="Write the item here!"
           class="text-xl text-gray-800 flex-1 p-3 bg-transparent border-none outline-none rounded-md" />
-        <div class="flex ml-2 gap-2">
+        <div class=" md:flex md:ml-2 md:gap-2">
           <button @click="addTask"
             class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-full transition duration-200">
             Add

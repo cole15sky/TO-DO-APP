@@ -1,14 +1,15 @@
-// import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core'
-// import type { InferInsertModel } from 'drizzle-orm'
-// import { todo } from './todo'
+import { sqliteTable, integer, text} from "drizzle-orm/sqlite-core";
+import { sql, InferInsertModel, InferSelectModel } from "drizzle-orm";
 
-// const users = sqliteTable('users', {
-//   id: integer('id').primaryKey(),
-//   firstName: text('first_name'),
-//   lastName: text('last_name'),
-//   age: integer('age'),
-// })
 
-// export { todo, users }
+export const user = sqliteTable("user", {
+  id: integer("id").primaryKey(), 
+  username: text("username").notNull().unique(), 
+  email: text("email").notNull().unique(), 
+  password: text("password").notNull(), 
+  created: text("created").default(sql`CURRENT_TIMESTAMP`),
+  updated: text("updated").default(sql`CURRENT_TIMESTAMP`),
+});
 
-// export type User = InferInsertModel<typeof users>
+export type UserInsert = InferInsertModel<typeof user>; 
+export type UserSelect = InferSelectModel<typeof user>; 
