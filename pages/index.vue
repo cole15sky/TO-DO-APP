@@ -48,7 +48,7 @@ const isSignedIn = ref(false);
   };
   
   const goToDashboard = () => {
-    router.push("/signin");
+    router.push("/login");
   };
   
   const signOut = () => {

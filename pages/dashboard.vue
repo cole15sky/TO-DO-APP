@@ -92,7 +92,7 @@ const clearTodo = async () => {
 
 const signOut = () => {
     isSignedIn.value = true;
-    router.push("/signin");
+    router.push("/login");
   };
 </script>
 
