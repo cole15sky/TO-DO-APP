@@ -1,6 +1,9 @@
 <script setup>
 const taskInput = ref('');
 const editingTask = ref(null);
+const router = useRouter();
+const isSignedIn = ref(false);
+
 
 const { data: tasks, error, refresh } = useFetch('/api/todo', {
   transform: (fetchedTasks) => fetchedTasks.map(task => ({ ...task, isEditing: false })),
@@ -84,13 +87,27 @@ const clearTodo = async () => {
     console.error('Error clearing tasks', e);
   }
 };
+
+
+
+const signOut = () => {
+    isSignedIn.value = true;
+    goTosignIn();
+  };
+  
+  const goTosignIn = () => {
+    router.push("/signin");
+  };
 </script>
 
 
 <template>
   <main class="flex justify-center items-center min-h-screen bg-gray-400">
-    <div class="w-full max-w-4xl bg-white shadow-xl bg-blue-100 rounded-lg p-8 border-2 border-blue-800">
-      <div class="flex justify-center mb-6">
+    <div class="absolute top-6 left-[100px]">
+      <button class="bg-red-600 p-3 rounded-3xl hover:bg-red-800" @click="signOut"> SignOut</button>
+    </div>
+    <div class="w-full max-w-4xl bg-white shadow-xl bg-purple-200 rounded-lg p-8 border-2 border-blue-800">
+      <div class="flex justify-center">
         <h1 class="text-3xl p-1 font-bold border-white border-2 border:rounded-xl text-gray-800 border-blue-900">To-Do
           List</h1>
       </div>
@@ -112,7 +129,7 @@ const clearTodo = async () => {
 
       <div class="mt-8">
         <div class="overflow-hidden rounded-lg shadow-lg bg-gray-500 border-">
-          <ul class="space-y-4 p-6 text-black">
+          <ul class="space-y-4 p-6 ml-2 text-black">
             <li v-for="task in tasks" :key="task.id" :class="{
               'line-through text-white': task.completed,
               'bg-white hover:bg-stone-400': !task.completed
