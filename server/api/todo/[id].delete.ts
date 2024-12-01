@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
     .delete(todo)
     .where(eq(todo.id, id))
 
+
   return {
     message: "Todo deleted successfully",  
   };
